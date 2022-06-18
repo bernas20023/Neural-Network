@@ -1,5 +1,6 @@
 from numpy import exp
 from csv import reader
+from random import uniform
 
 # Representação da rede neuronal
 class NeuralNetwork():
@@ -16,8 +17,42 @@ def sigmoid(value):
 def devsigmoid(value):
     return exp(value)/(pow(exp(value)+1, 2))
 
+# Inicializar os pesos com números aleatórios uniformes entre -1 e 1
+def initweights(weights):
+    for i in range(len(weights)):
+        for j in range(len(weights[0])):
+            weights[i][j] = uniform(-1, 1)
+
+# Inicializar os biases com números aleatórios uniformes entre -1 e 1
+def initbiases(biases):
+    for i in range(len(biases)):
+        for j in range(len(biases[0])):
+            biases[i][j] = uniform(-1, 1)
+
+# Treinar a rede neuronal
+def train():
+    return 0
+
+# Testar a rede neuronal
+def test():
+    return 0
+
+# Algoritmo Feed-Forward
+def feedforward():
+    return 0
+
+# Algoritmo Backpropagation
+def backpropagation():
+    return 0
+
+# Calcular o erro absoluto
+def abserr(x0, x):
+    return x0-x
+
 # Leitura do dataset 
 def read_dataset(file):
+    data = []
+
     try:
         dataset = open(file, 'r')
 
@@ -25,10 +60,10 @@ def read_dataset(file):
         print("Não foi possível abrir o ficheiro", file)
         exit()
 
-    csvreader = reader(file, delimiter = ',')
+    datareader = reader(file, delimiter = ',')
 
-
-# ---------- Código para testar e treinar a rede neuronal ---------- #
+    
+# ---------- Código de teste ---------- #
 
 # Dataset de treino
 trainSet = input('Escolha um ficheiro em formato .csv para treinar a rede neuronal\n')
