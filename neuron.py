@@ -2,9 +2,6 @@ import math
 import random
 import csv
 
-# It's a python script, run it like a python script. Change input? "nn = Network(4, 8)" 
-# Is in run function. change the total input and hidden nodes. Input function doesn't care about length.
-
 #sigmoidal function defined nicely 
 def sigmoid(x):
   return 1 / (1 + math.exp(-x))
@@ -33,14 +30,14 @@ class Network:
   #initialize the neural net
   def __init__(self, inputNodes, hiddenNodes):
     # define the number of nodes in each layer from what we input when we call the functionm
-    self.numberInput = inputNodes + 1 # inputs
+    self.numberInput = inputNodes +1 # inputs
     self.numberHidden = hiddenNodes # hidden 
     self.numberOutput = 1
     # define the matrices for the weights with the number of nodes in each layer
     self.matrixInput = [0] * self.numberInput # input layer
     self.matrixHidden = [0] * self.numberHidden # hidden layer
     self.matrixOutput = [0] * self.numberOutput # output layer
-    # define the weight matrixes for the neural net 
+    # define the weight matrixes and biases for the neural net 
     self.inputWeights = makeMatrix(self.numberInput, self.numberHidden)
     self.outputWeights = makeMatrix(self.numberHidden, self.numberOutput)
     # starting weights for the neural net 
@@ -54,13 +51,13 @@ class Network:
   # Run the network with the provided input
   def run(self, inputs):
     # add the inputs to the input layer
-    for i in range(self.numberInput - 1):
+    for i in range(self.numberInput-1):
       self.matrixInput[i] = inputs[i]
     # calculate the hidden layer
     for j in range(self.numberHidden): # for each hidden node
       sum = 0.0 # sum of the weights * inputs
       for i in range(self.numberInput): # for each input for each hidden node
-        sum += self.matrixInput[i] * self.inputWeights[i][j]
+        sum += self.matrixInput[i] * self.inputWeights[i][j] 
       self.matrixHidden[j] = sigmoid(sum)
     # calculate the output layer
     for k in range(self.numberOutput): # for each output node
@@ -71,40 +68,33 @@ class Network:
     # return the output layer
     return self.matrixOutput
 
-  #   
-  # Backpropagate the error and update the weights
-  # N is the learning rate
-  # https://brilliant.org/wiki/backpropagation/
-  # output deltas are the error for each output node 
-  # we use gradient descent to update the weights 
-  # Use the learning rate to update the weights
-  #
   def backPropagate (self, targets, learning_rate):
-    # output deltas
+    # inicializar output deltas
     output_deltas = [0] * self.numberOutput
-    # calculate the output deltas
+    # calcular os output deltas
     for k in range(self.numberOutput):
       output_deltas[k] = (targets[k] - self.matrixOutput[k]) * desigmoid(self.matrixOutput[k])
-    # hidden deltas
+    # inicializar hidden deltas
     hidden_deltas = [0] * self.numberHidden
-    # calculate the hidden deltas
+    # calcular hidden deltas
     for j in range(self.numberHidden):
       error = 0.0
       for k in range(self.numberOutput):
         error += output_deltas[k] * self.outputWeights[j][k]
-      hidden_deltas[j] = desigmoid(self.matrixHidden[j]) * error
-    # update the weights
+      hidden_deltas[j] = desigmoid(self.matrixHidden[j]) * error 
+    # hidden to output weight changes
     for j in range(self.numberHidden):
       for k in range(self.numberOutput):
         change = output_deltas[k] * self.matrixHidden[j]
         self.outputChange[j][k] = change
         self.outputWeights[j][k] += (learning_rate * change)
+    # input to hidden weight changes    
     for i in range(self.numberInput):
       for j in range(self.numberHidden):
         change = hidden_deltas[j] * self.matrixInput[i]
         self.inputChange[i][j] = change
         self.inputWeights[i][j] += (learning_rate * change)
-    # calculate the mean square error
+    # calculate the error
     sum = 0.0
     for k in range(len(targets)):
       sum += (targets[k] - self.matrixOutput[k])**2
