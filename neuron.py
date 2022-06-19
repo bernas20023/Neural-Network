@@ -1,6 +1,7 @@
 import math
 import random
 import csv
+import sys
 
 #sigmoidal function defined nicely 
 def sigmoid(x):
@@ -134,15 +135,15 @@ class Network:
       
   # Train the network with the provided data and the number of iterations and the learning rate 
   def train(self, data, epochs, learning_rate):
-    for gen in range(epochs):
+    for gen in range(epochs+1):
       for d in data:
         inputs = d[0]
         targets = d[1]
         self.run(inputs)
         loss = self.backPropagate(targets, learning_rate)
-      if gen % 200 == 0:
-        # print loss and generation
+      if loss<0.05 :
         print('Generation: ' + str(gen) + ' Loss: ' + str(loss))
+        break
 #Build Neural Net and Run Some tests
 def run():
   # import data from csv file. 
@@ -154,9 +155,8 @@ def run():
       trainingData.append([[int(row[0][i]) for i in range(len(row[0]))], [int(row[1])]])
   # input nodes, output nodes. Input should be <= number of bits because each bit is a node
   nn = Network(4, 4)
-  # change these values up
-  nn.train(trainingData, 1000, 0.9)
-  nn.printWeights()
+  nn.train(trainingData, sys.maxsize, 0.05)
+  #nn.printWeights()
   # test some data and print the results
   print('Test data:')
   nn.test(trainingData)
