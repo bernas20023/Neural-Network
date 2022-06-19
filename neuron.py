@@ -2,7 +2,10 @@ import math
 import random
 import csv
 
-#sigmoidal function
+# It's a python script, run it like a python script. Change input? "nn = Network(4, 8)" 
+# Is in run function. change the total input and hidden nodes. Input function doesn't care about length.
+
+#sigmoidal function defined nicely 
 def sigmoid(x):
   return 1 / (1 + math.exp(-x))
 
@@ -17,7 +20,7 @@ def makeMatrix(x,y):
     matrix.append([0]*y)
   return matrix
 
-# randomize the weights of the neural net 
+# randomize the weights of the  
 def matrixRandomizer(matrix, a, b):
   for i in range(len(matrix)):
     for j in range(len(matrix[0])):
@@ -68,6 +71,14 @@ class Network:
     # return the output layer
     return self.matrixOutput
 
+  #   
+  # Backpropagate the error and update the weights
+  # N is the learning rate
+  # https://brilliant.org/wiki/backpropagation/
+  # output deltas are the error for each output node 
+  # we use gradient descent to update the weights 
+  # Use the learning rate to update the weights
+  #
   def backPropagate (self, targets, learning_rate):
     # output deltas
     output_deltas = [0] * self.numberOutput
@@ -129,20 +140,19 @@ class Network:
     for d in data:
       inputs = d[0]
       # print input, run the network, and print the output, then print the target
-      print('Input:', inputs, '->', self.run(inputs), 'Target:', d[1], "Loss:", self.backPropagate(d[1], 0.0))
+      print('Input:', inputs, '->', self.run(inputs), 'Target:', d[1], "Loss:", self.backPropagate(d[1], 0))
       
   # Train the network with the provided data and the number of iterations and the learning rate 
-  def train(self, data, learning_rate):
-    counter = 0
-    for d in data:
-      inputs = d[0]
-      targets = d[1]
-      self.run(inputs)
-      loss = self.backPropagate(targets, learning_rate)
-      counter += 1
-      if loss < 0.5:
-          print('Train times: ' + str(counter) + ' Loss: ' + str(loss))
-          break;  
+  def train(self, data, epochs, learning_rate):
+    for gen in range(epochs):
+      for d in data:
+        inputs = d[0]
+        targets = d[1]
+        self.run(inputs)
+        loss = self.backPropagate(targets, learning_rate)
+      if gen % 200 == 0:
+        # print loss and generation
+        print('Generation: ' + str(gen) + ' Loss: ' + str(loss))
 #Build Neural Net and Run Some tests
 def run():
   # import data from csv file. 
@@ -153,19 +163,13 @@ def run():
       # the first row is the input, the second is the target.
       trainingData.append([[int(row[0][i]) for i in range(len(row[0]))], [int(row[1])]])
   # input nodes, output nodes. Input should be <= number of bits because each bit is a node
-
-  testData = []
-  with open('test.csv', 'r') as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=',')
-    for row in csvreader:
-      # the first row is the input, the second is the target.
-      testData.append([[int(row[0][i]) for i in range(len(row[0]))], [int(row[1])]])
-
   nn = Network(4, 4)
-  nn.train(trainingData, 0.5)
-  #nn.printWeights()
-  # test some data
+  # change these values up
+  nn.train(trainingData, 1000, 0.9)
+  nn.printWeights()
+  # test some data and print the results
   print('Test data:')
-  nn.test(testData)
+  nn.test(trainingData)
+  nn.printInfo()
 
 run() # main function
