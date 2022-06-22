@@ -139,6 +139,8 @@ class NeuralNetwork:
       print('1')
     else:
       print('0')
+    #print('Accuracy' + str(output))
+
 
 """
 # Leitura do dataset de treino 
@@ -233,7 +235,7 @@ for line in testData:
 
 # Função principal
 def exec():
-  print('Esta rede neuronal tem como objetivo testar se um número binário tem um número par de 1s. O output será 1 se o número dado tiver número par de 1s, ou 0, caso contrário. Para isso, terá de incluir um dataset para treinar a rede neuronal\n')
+  print('Esta rede neuronal tem como objetivo testar se um número binário tem um número par de 1s. O output será 0 se o número dado tiver número par de 1s, ou 1, caso contrário. Para isso, terá de incluir um dataset para treinar a rede neuronal\n')
   trainSet = input('Escolha um ficheiro em formato .csv para treinar a rede neuronal\n')
 
   while not trainSet.endswith('.csv'):
@@ -256,7 +258,7 @@ def exec():
   print('A treinar a rede neuronal...')
     
   NN = NeuralNetwork(4, 4)
-  NN.train(trainData, maxsize, 0.05)
+  NN.train(trainData, maxsize, 0.5)
   test = input('Insira um número binário com 4 dígitos: ')
   numtest = [int(test[0]),int(test[1]),int(test[2]),int(test[3])]
   NN.test(numtest) 
