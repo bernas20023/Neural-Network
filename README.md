@@ -14,12 +14,6 @@ Este é um exemplo simples de uma implementação de uma rede neural em Python, 
 - Python 3.x
 - Bibliotecas: numpy, csv
 
-## Instalação
-
-1. Clone o repositório: git clone https://github.com/seu_usuario/seu_repositorio.git
-
-2. Certifique-se de ter o Python 3.x instalado. Você pode instalar as bibliotecas necessárias executando: pip install numpy
-
 ## Utilização
 
 1. Prepare um conjunto de dados de treinamento no formato CSV.
